@@ -1,8 +1,12 @@
 # syncShell
+
+![](https://img.shields.io/badge/version-0.1.0-brightgreen.svg) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
+
 将多个shell任务转换为同步任务（我也不知道怎么命名比较合适）
 Perform multiple shell tasks in synchronous order (I don't know how to name it)
 
-### [English version](#en)
+### [English version](#english-version-document) is at the bottom
+
 
 报告bug：
 
@@ -124,7 +128,7 @@ cmd -c test1
 
 
 
-# <span id="en">English version document</span>
+# <span id="english-version-document">English version document</span>
 
 Report bug：
 
