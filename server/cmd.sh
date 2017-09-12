@@ -47,7 +47,7 @@ then
 	content=$(sed -n "1p" /var/log/cmd/${cmd}.whois)
 	time=${content:0:19}
 	name=${content:20}
-	echo "I am busy now, ${name} is running now at ${time}"
+	echo "I am busy now, ${name} is running at ${time}"
 	flock -x "/dev/shm/cmd-${cmd}"  -c "echo $(date '+%Y-%m-%d %H:%M:%S')' '${user} > /var/log/cmd/${cmd}.whois; $cmdT;"
 fi
 

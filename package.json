@@ -1,0 +1,33 @@
+{
+    "name": "syncShell",
+    "author": {
+        "name": "LanFly <bluescode@outlook.com>"
+    },
+    "version": "0.1.0",
+    "description": "Perform multiple shell tasks in synchronous order",
+    "bin": {
+        "cmd": "node ./client-Node/nodeSSH.js"
+    },
+    "keywords": [
+        "cmd",
+        "synchronous",
+        "shell",
+        "manager",
+        "queue",
+        "task",
+        "order"
+    ],
+    "bugs": {
+        "url": "https://github.com/LanFly/syncShell/issues",
+        "email": "bluescode@outlook.com"
+    },
+    "dependencies": {
+        "chalk": "^2.1.0",
+        "json-format": "^1.0.1",
+        "node-ssh": "^4.0.1",
+        "readline-sync": "^1.4.7",
+        "ssh2": "^0.5.4",
+        "yargs": "^7.0.2"
+    },
+    "license": "MIT"
+}
