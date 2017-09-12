@@ -1,12 +1,12 @@
 {
-    "name": "syncShell",
+    "name": "syncshell",
     "author": {
         "name": "LanFly <bluescode@outlook.com>"
     },
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Perform multiple shell tasks in synchronous order",
     "bin": {
-        "cmd": "node ./client-Node/nodeSSH.js"
+        "cmd": "./client-Node/nodeSSH.js"
     },
     "keywords": [
         "cmd",
@@ -29,5 +29,11 @@
         "ssh2": "^0.5.4",
         "yargs": "^7.0.2"
     },
+    "repository": {
+        "type": "git",
+        "url": "git@github.com:LanFly/syncShell.git"
+    },
+    "homepage": "https://github.com/LanFly/syncShell",
+    "readmeFilename": "README.md",
     "license": "MIT"
 }

@@ -3,6 +3,7 @@
 ![](https://img.shields.io/badge/version-0.1.0-brightgreen.svg) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 将多个shell任务转换为同步任务（我也不知道怎么命名比较合适）
+
 Perform multiple shell tasks in synchronous order (I don't know how to name it)
 
 ### [English version](#english-version-document) is at the bottom
@@ -39,12 +40,12 @@ Perform multiple shell tasks in synchronous order (I don't know how to name it)
 
 # 怎么用？
 
-第一步：把`server`文件夹下的`cmd.sh`文件放到你的服务器上，默认放到`/usr/local/bin/cmd.sh`，然后设置`alias`为`cmd`，这样你就可以在任意目录执行cmd命令了。
+**第一步**：把`server`文件夹下的`cmd.sh`文件放到你的服务器上，默认放到`/usr/local/bin/cmd.sh`，然后设置`alias`为`cmd`，这样你就可以在任意目录执行cmd命令了。
 ```bash
 alias cmd=/usr/local/bin/cmd.sh
 ```
 
-第二步：打开cmd.sh文件，配置要让它管理的任务。定位到这段代码：
+**第二步**：打开cmd.sh文件，配置要让它管理的任务。定位到这段代码：
 ```bash
 #映射命令简称对应的目标命令
 cmdT="" #目标命令
@@ -64,7 +65,7 @@ esac
 
 你可以在这里添加任意多个任务。
 
-第三步：执行任务。
+**第三步**：执行任务。
 `sh /usr/local/bin/cmd.sh -u LanFly -c test1`
 如果你配置了`alias`，则可以使用更短的命令
 `cmd -u LanFly -c test1`
@@ -87,7 +88,7 @@ esac
 
 很简单，使用-g选项全局安装。如果安装错误，你可能需要加上sudo以提供权限。
 ```bash
-npm install syncShell -g
+npm install syncshell -g
 ```
 安装完后，你就可以像服务器端一样直接使用cmd命令了，用法稍微有点不同。不过在这之前我们先得进行简单的配置。
 
@@ -95,7 +96,7 @@ npm install syncShell -g
 
 在终端中输入：
 ```bash
-cmd
+sudo cmd
 ```
 第一次运行会让你输入服务端配置信息，按照自己的情况输入，下面是各字段的说明：
 `user`: 谁在用这个客户端，一般是你自己的用户名。即`-c`参数的值，客户端会自动帮你填写`-c`参数。
@@ -161,12 +162,12 @@ All this requires manual collaboration between A and B. SyncShell is a tool, it 
 
 # How to use it?
 
-The first step: put the `cmd.sh` file under the `server` folder on your server, default to `/usr/local/bin/cmd.sh`, and then set alias to `cmd` so that you can execute the cmd command in any directory.
+**The first step**: put the `cmd.sh` file under the `server` folder on your server, default to `/usr/local/bin/cmd.sh`, and then set alias to `cmd` so that you can execute the cmd command in any directory.
 ```bash
 alias cmd=/usr/local/bin/cmd.sh
 ```
 
-The second step: open the `cmd.sh` file and configure the task to be managed by it. Locate this code:
+**The second step**: open the `cmd.sh` file and configure the task to be managed by it. Locate this code:
 ```bash
 #The mapping command is referred to as the corresponding target command
 cmdT="" #Target command
@@ -186,7 +187,7 @@ We define 3 tasks, namely `test1`, `test2`, `build`, and the task corresponding 
 
 You can add any number of tasks here.
 
-The third step: perform the task:
+**The third step**: perform the task:
 `sh /usr/local/bin/cmd.sh -u LanFly -c test1`
 If you configure `alias`, you can use shorter commands:
 `cmd -u LanFly -c test1`
@@ -210,7 +211,7 @@ The server installation is simple and requires only one `cmd.sh` file. SyncShell
 Very simple. Use the `-g` option to install globally. If the installation error, you may need to add sudo to provide permissions.
 
 ```bash
-npm install syncShell -g
+npm install syncshell -g
 ```
 
 Once installed, you can use the `cmd` command directly like the server side. The usage is slightly different. But before that, we have to do simple configuration.
@@ -220,7 +221,7 @@ Once installed, you can use the `cmd` command directly like the server side. The
 Input in terminal:
 
 ```bash
-cmd
+sudo cmd
 ```
 The first run allows you to type in the server configuration information and enter it as you like. Here are the instructions for each field:
 `user`: Who is using this client? usually your own user name. That is, the value of the -c parameter, and the client will help you fill out the -c parameter automatically.

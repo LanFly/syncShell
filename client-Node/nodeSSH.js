@@ -153,7 +153,7 @@ function friendly() {
         console.log('- url:    https://github.com/LanFly/syncShell/issues');
         console.log('- email:  LanFly <bluescode@outlook.com>');
         console.log('You can copy the following information to help me quickly locate the problem, Thank you very much.\n');
-        console.log('version: 0.1.0');
+        console.log('version: 0.1.1');
         console.log(error.stack);
         process.exit(1);
     });
@@ -167,7 +167,7 @@ function readPackage() {
         if (!package) {
             package = {
                 name: 'cmd',
-                version: '0.1.0',
+                version: '0.1.1',
                 author: {
                     name: 'author: LanFly <bluescode@outlook.com>'
                 }
@@ -176,7 +176,7 @@ function readPackage() {
     } catch (error) {
         package = {
             name: 'cmd',
-            version: '0.1.0',
+            version: '0.1.1',
             author: {
                 name: 'author: LanFly <bluescode@outlook.com>'
             }
