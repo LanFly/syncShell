@@ -105,30 +105,19 @@ ssh2.on('ready', function () {
             });
         });
     });
-    // 判断是否有多个-c参数，如果有，则取第一个
-    if (isArray(argv.c)) {
-        argv.c = argv.c[0];
-    }
+
     // 判断是否有必填参数，如果语法错误则显示帮助信息
-    if (!argv.c || argv.c === true) {
+    if (cmdArguments.length == 0) {
         package = readPackage();
         showHelp(package);
         process.exit(0);
     }
-    // 获取要命令
-    var cmd = argv.c || '';
 
-    var shell = "sh " + __CONFIG.cmdPath + " -u " + __CONFIG.user;
-    shell = shell + ' -c ' + cmd;
-    // 去除本应用需要用到的参数，保留剩下的
-    for (var i = 0; i < cmdArguments.length; i++) {
-        // 只删除第一个-c参数
-        if (cmdArguments[i] === '-c' || cmdArguments[i] === '--c') {
-            cmdArguments.splice(i, 2);
-            break;
-        }
-    }
+    var shell = "sh " + __CONFIG.cmdPath;
+
     shell = shell + ' ' + cmdArguments.join(' ');
+
+    shell = shell + " -u " + __CONFIG.user;
 
     ssh2.exec(shell, function (err, stream) {
         if (err) throw err;
@@ -153,7 +142,7 @@ function friendly() {
         console.log('- url:    https://github.com/LanFly/syncShell/issues');
         console.log('- email:  LanFly <bluescode@outlook.com>');
         console.log('You can copy the following information to help me quickly locate the problem, Thank you very much.\n');
-        console.log('version: 0.1.1');
+        console.log('version: 1.0.0');
         console.log(error.stack);
         process.exit(1);
     });
@@ -167,7 +156,7 @@ function readPackage() {
         if (!package) {
             package = {
                 name: 'cmd',
-                version: '0.1.1',
+                version: '1.0.0',
                 author: {
                     name: 'author: LanFly <bluescode@outlook.com>'
                 }
@@ -176,7 +165,7 @@ function readPackage() {
     } catch (error) {
         package = {
             name: 'cmd',
-            version: '0.1.1',
+            version: '1.0.0',
             author: {
                 name: 'author: LanFly <bluescode@outlook.com>'
             }
@@ -189,9 +178,13 @@ function showHelp(package) {
     console.log('Usage: cmd [options]');
     console.log('Options:');
     console.log('   -c, --c         ', 'Commands to run');
+    console.log('   list            ', 'List all tasks');
+    console.log('   who             ', 'See all the running tasks');
     console.log('   -v, --version   ', 'Display software version')
     console.log('   -h, --help      ', 'Show help');
     console.log('Examples:');
+    console.log('   cmd list            // List all tasks');
+    console.log('   cmd who             // See all the running tasks and show who is running');
     console.log('   cmd -c gulp-test1   // run gulp-test1 command defined in the cmd.sh file on server');
     console.log('Infomation:');
     console.log('   name:   ' + package.name);
