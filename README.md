@@ -1,6 +1,6 @@
 # syncShell
 
-![](https://img.shields.io/badge/version-1.0.0-brightgreen.svg) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
+![](https://img.shields.io/badge/version-2.0.0-brightgreen.svg) ![](https://img.shields.io/badge/build-passing-brightgreen.svg)
 
 将多个shell任务转换为同步任务（我也不知道怎么命名比较合适）
 
@@ -13,7 +13,7 @@ Perform multiple shell tasks in synchronous order (I don't know how to name it)
 
  - email: [bluescode@outlook.com](mailto:bluescode@outlook.com)
  - issue: [https://github.com/LanFly/syncShell/issues](https://github.com/LanFly/syncShell/issues)
- - 目前仅支持macOS和Linux，暂不支持windows。我正在尝试让它在windows上运行良好。
+ - 目前npm安装仅支持macOS和Linux。若要支持windows，需手动安装，这很简单。
 
 > 下一个版本期望的新功能：
 
@@ -21,20 +21,24 @@ Perform multiple shell tasks in synchronous order (I don't know how to name it)
 
 > 更新记录
 
+  v2.0.0:
+
+   - 可以给任务附加额外参数
+
   v1.0.0:
 
    - 配置任务方式变更，更简洁明了
    - 可查看当前所有正在运行的任务
-   - 可查看当前所有已经配置的任务
+   - 可查看当前所有已经配置的任务
    - 增加日志，可查看所有用户操作的详细信息
 
   v0.1.1:
 
-   - 新增node客户端，用户可在本地终端直接执行cmd，用法和服务端一样
+   - 新增node客户端，用户可在本地终端直接执行cmd，用法和服务端一样
 
   v0.0.1:
 
-   - 支持配置任务
+   - 支持配置任务
    - 支持查看正在运行的相同的任务
 
 举个栗子：
@@ -128,7 +132,7 @@ syncShell会记录所有通过cmd执行的命令。它会记录谁在什么时�
 
 服务端安装很简单，只需要一个cmd.sh文件就行。syncShell还有一个客户端，可以让你在自己电脑上远程执行cmd任务。省去手动连接服务器的麻烦。
 
-cmd.sh文件在npm包里的server文件夹下。你也可以在服务器上面执行下面的命令下载cmd.sh文件。
+cmd.sh文件在npm包里的server文件夹下。你也可以在服务器上面执行下面的命令下载cmd.sh文件。
 ```bash
 wget https://raw.githubusercontent.com/LanFly/syncShell/master/server/cmd.sh
 ```
@@ -166,12 +170,68 @@ sudo cmd
 ```bash
 cmd -c test1
 ```
-如果你配置的用户名为`LanFLy`，则上面的命令的结果等于`sh /usr/local/bin/cmd.sh -c test1 -u LanFly`。它会自动连接服务器，并运行这个命令。
+如果你配置的用户名为`LanFLy`，则上面的命令的结果等于`sh /usr/local/bin/cmd.sh -u LanFly -c test1`。它会自动连接服务器，并运行这个命令。
 
 你还可以输入其它的参数，它会原样传递给cmd.sh脚本，你可以编辑脚本实现更多功能。
 
 
 **客户端按ctrl+c同样会传递给服务端。总之，你可以认为客户端的执行和服务端完全一样。**
+
+
+### 给任务附加额外参数
+
+> 2.0.0版本新增功能
+
+现在，你可以在执行任务的时候给任务附加额外的参数。看下面的例子：
+
+我配置了一个叫`whoAmI`的任务
+
+```bash
+cmdMap+=(["whoAmI"]="sh ~/whoAmI.sh")
+```
+
+whoAmI.sh脚本如下面所示
+
+```bash
+user="unknow" # 用户名
+
+while getopts "u:" arg
+do
+  case $arg in
+  u)
+    user=$OPTARG
+    ;;
+  esac
+done
+echo 'my name is '$user
+```
+这个脚本需要一个参数-u，并且会把-u参数的值输出。
+
+现在我通过cmd执行这个任务:
+
+> cmd -c whoAmI -u LanFly
+
+-c参数表示让cmd执行whoAmI任务，-u参数则会透传给whoAmI任务所对应的脚本。
+
+你可以在后面无限附加任何参数，这些参数都会透传给任务。但要记住，前面2个参数必定是-c和-u，并且前面2个参数不会传给任务。-u参数在客户端自动帮你填写了，所以用客户端不需要-u参数。
+
+任务执行的结果为:
+
+> my name is LanFly
+
+#### 现在让我们来看看cmd做了什么。
+
+首先客户端cmd会生成要执行的命令：
+
+> sh ${cmd path in you server} -u ${your name} -c whoAmI -u LanFly
+
+然后发送这条命令到服务器执行。
+
+服务端cmd收到这条命令后，查找whoAmI任务的内容。然后把前面2个参数去除，也就是-u和-c参数。然后把剩下的所有参数拼接在任务后面。
+
+最终，服务器端cmd生成实际执行的bash命令：
+
+> sh ~/whoAmI.sh -u LanFly
 
 -------------------------
 
@@ -187,13 +247,17 @@ cmd -c test1
 
  - email: [bluescode@outlook.com](mailto:bluescode@outlook.com)
  - issue: [https://github.com/LanFly/syncShell/issues](https://github.com/LanFly/syncShell/issues)
- - Only MAC OS and Linux are currently supported and Windows is not supported. I'm trying to make it work well on Windows.
+ - Currently, the NPM installation only supports macOS and Linux. To support Windows, you need to install it manually, which is easy.
 
 > New functionality for the next release
 
  - Support to view all the tasks that are queuing
 
 > change log
+
+  v2.0.0:
+
+   - Additional parameters can be added to the task
 
   v1.0.0:
 
@@ -351,9 +415,65 @@ The client usage is consistent with the server usage. The difference is that the
 cmd -c test1
 ```
 
-If you configure the user name to be LanFLy, the result of the above command is equal to `sh /usr/local/bin/cmd.sh -c test1 -u LanFly`. It automatically connects to the server and runs this command.
+If you configure the user name to be LanFLy, the result of the above command is equal to `sh /usr/local/bin/cmd.sh -u LanFly -c test1`. It automatically connects to the server and runs this command.
 
 You can also input other parameters, which will pass to the cmd.sh script as they are, and you can edit the script to perform more functions.
 
 
 **The client by ctrl+c will also pass to the server. In short, you can think that the client's execution is exactly the same as the server.**
+
+### Attach additional parameters to the task
+
+> 2.0.0 new features
+
+Now, you can attach additional parameters to the task while performing the task. Look at the following example:
+
+I configured with a ` whoAmI ` task
+
+```bash
+cmdMap+=(["whoAmI"]="sh ~/whoAmI.sh")
+```
+
+The whoam.sh script is shown below:
+
+```bash
+user="unknow"
+
+while getopts "u:" arg
+do
+  case $arg in
+  u)
+    user=$OPTARG
+    ;;
+  esac
+done
+echo 'my name is '$user
+```
+
+This script requires a parameter -u and outputs the value of the -u parameter.
+
+Now I perform this task through cmd:
+
+> cmd -c whoAmI -u LanFly
+
+The -c parameter indicates that cmd performs the whoAmI task, and the -u parameter will pass to the script corresponding to the whoAmI task.
+
+You can attach any parameter to the back, which can be passed to the task. But remember, the first two arguments must be -c and -u, and the first two parameters will not be passed to the task. The -u parameter is automatically filled in on the client side, so you don't need the -u parameter on the client side.
+
+The results of the task execution are:
+
+> my name is LanFly
+
+#### Now let's see what cmd does.
+
+First, the client cmd generates the command to execute:
+
+> sh ${cmd path in you server} -u ${your name} -c whoAmI -u LanFly
+
+This command is then sent to the server for execution.
+
+After receiving this command, the server cmd looks for the contents of the whoAmI task. And then cmd remove the first two parameters, which is the -u and -c parameters. Then the remaining parameters are spliced in the back of the task.
+
+Finally, the server side cmd generates the actual bash commands that are executed:
+
+> sh ~/whoAmI.sh -u LanFly

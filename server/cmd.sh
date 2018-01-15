@@ -1,3 +1,7 @@
+# ver: 2.0.0
+# author: LanFly
+# mail: bluescode@outlook.com
+
 # 初始化资源，存放日志文件
 if [ ! -d "/var/log/cmd" ];
 then
@@ -6,17 +10,25 @@ fi
 # 配置操作记录日志文件
 access_log="/var/log/cmd/access.log"
 
-# 处理参数
+# 处理参数，前2个参数一定是-c和-u，后面可以无限接其它参数，这些参数除了-c和-u，剩余的会被原样透传给要执行的目标命令
+otherPara=$*
+otherPara=${otherPara#-c * }
+otherPara=${otherPara#-u * }
+
 user="unknow" # 用户名
 cmd="" # 命令简称
 while getopts "u:c:" arg
 do
   case $arg in
   u)
-    user=$OPTARG
+    if [[ "$OPTIND" = "3" || "$OPTIND" = "5" ]]; then
+      user=$OPTARG
+    fi
     ;;
   c)
-    cmd=$OPTARG
+    if [[ "$OPTIND" = "3" || "$OPTIND" = "5" ]]; then
+      cmd=$OPTARG
+    fi
     ;;
   esac
 done
@@ -60,9 +72,11 @@ fi
 
 # 查找命令简称对应的目标命令
 cmdT="" # 目标命令
+cmdTPara="" # 带参数的目标命令
 for k in ${!cmdMap[@]}; do
   if [ "$k" = "$cmd" ]; then
     cmdT=${cmdMap[$k]}
+    cmdTPara=${cmdMap[$k]}' '${otherPara}
     break
   fi
 done
@@ -76,9 +90,9 @@ curTime=$(date '+%Y-%m-%d %H:%M:%S')
 isBusy=0
 flock -xn "/dev/shm/cmd-${cmd}" -c "\
   echo ${curTime}' '${user} > /var/log/cmd/${cmd}.whois;\
-  echo '[start]-['${curTime}']-['${user}']-['${cmd}']-['${cmdT}']' >> ${access_log};\
-  $cmdT;\
-  echo '[finish]-['$(date '+%Y-%m-%d %H:%M:%S')']-['${user}']-['${cmd}']-['${cmdT}']' >> ${access_log};
+  echo '[start]-['${curTime}']-['${user}']-['${cmd}']-['${cmdTPara}']' >> ${access_log};\
+  $cmdTPara;\
+  echo '[finish]-['$(date '+%Y-%m-%d %H:%M:%S')']-['${user}']-['${cmd}']-['${cmdTPara}']' >> ${access_log};
 "
 
 isBusy=$?
@@ -90,9 +104,9 @@ then
 	echo "I am busy now, ${name} is running at ${time}"
 	flock -x "/dev/shm/cmd-${cmd}"  -c "\
           echo $(date '+%Y-%m-%d %H:%M:%S')' '${user} > /var/log/cmd/${cmd}.whois;\
-          echo '[start]-['${curTime}']-['${user}']-['${cmd}']-['${cmdT}']' >> ${access_log};\
-          $cmdT;\
-          echo '[finish]-['$(date '+%Y-%m-%d %H:%M:%S')']-['${user}']-['${cmd}']-['${cmdT}']' >> ${access_log};
+          echo '[start]-['${curTime}']-['${user}']-['${cmd}']-['${cmdTPara}']' >> ${access_log};\
+          $cmdTPara;\
+          echo '[finish]-['$(date '+%Y-%m-%d %H:%M:%S')']-['${user}']-['${cmd}']-['${cmdTPara}']' >> ${access_log};
         "
 fi
 

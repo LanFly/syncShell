@@ -3,7 +3,7 @@
     "author": {
         "name": "LanFly <bluescode@outlook.com>"
     },
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Perform multiple shell tasks in synchronous order",
     "bin": {
         "cmd": "./client-Node/nodeSSH.js"

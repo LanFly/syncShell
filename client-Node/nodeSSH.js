@@ -115,9 +115,9 @@ ssh2.on('ready', function () {
 
     var shell = "sh " + __CONFIG.cmdPath;
 
-    shell = shell + ' ' + cmdArguments.join(' ');
-
     shell = shell + " -u " + __CONFIG.user;
+
+    shell = shell + ' ' + cmdArguments.join(' ');
 
     ssh2.exec(shell, function (err, stream) {
         if (err) throw err;
@@ -142,7 +142,7 @@ function friendly() {
         console.log('- url:    https://github.com/LanFly/syncShell/issues');
         console.log('- email:  LanFly <bluescode@outlook.com>');
         console.log('You can copy the following information to help me quickly locate the problem, Thank you very much.\n');
-        console.log('version: 1.0.0');
+        console.log('version: 2.0.0');
         console.log(error.stack);
         process.exit(1);
     });
@@ -156,7 +156,7 @@ function readPackage() {
         if (!package) {
             package = {
                 name: 'cmd',
-                version: '1.0.0',
+                version: '2.0.0',
                 author: {
                     name: 'author: LanFly <bluescode@outlook.com>'
                 }
@@ -165,7 +165,7 @@ function readPackage() {
     } catch (error) {
         package = {
             name: 'cmd',
-            version: '1.0.0',
+            version: '2.0.0',
             author: {
                 name: 'author: LanFly <bluescode@outlook.com>'
             }
