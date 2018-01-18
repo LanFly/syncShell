@@ -1,4 +1,4 @@
-# ver: 2.0.0
+# ver: 2.0.1
 # author: LanFly
 # mail: bluescode@outlook.com
 
@@ -12,12 +12,12 @@ access_log="/var/log/cmd/access.log"
 
 # 处理参数，前2个参数一定是-c和-u，后面可以无限接其它参数，这些参数除了-c和-u，剩余的会被原样透传给要执行的目标命令
 otherPara=$*
-otherPara=${otherPara#-c * }
 otherPara=${otherPara#-u * }
+otherPara=${otherPara#-c * }
 
 user="unknow" # 用户名
 cmd="" # 命令简称
-while getopts "u:c:" arg
+while getopts ":u:c:" arg
 do
   case $arg in
   u)

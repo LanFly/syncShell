@@ -115,7 +115,9 @@ ssh2.on('ready', function () {
 
     var shell = "sh " + __CONFIG.cmdPath;
 
-    shell = shell + " -u " + __CONFIG.user;
+    if (cmdArguments.length > 1) {
+        shell = shell + " -u " + __CONFIG.user;
+    }
 
     shell = shell + ' ' + cmdArguments.join(' ');
 
@@ -156,7 +158,7 @@ function readPackage() {
         if (!package) {
             package = {
                 name: 'cmd',
-                version: '2.0.0',
+                version: '2.0.1',
                 author: {
                     name: 'author: LanFly <bluescode@outlook.com>'
                 }
@@ -165,7 +167,7 @@ function readPackage() {
     } catch (error) {
         package = {
             name: 'cmd',
-            version: '2.0.0',
+            version: '2.0.1',
             author: {
                 name: 'author: LanFly <bluescode@outlook.com>'
             }
